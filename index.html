@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>Integrated mesh modification</title>
+    
+    <!-- Load styles -->
+    <link rel="stylesheet" href="./src/style.css" />
+
+    <!-- Load Calcite components from CDN -->
+    <script type="module" src="https://js.arcgis.com/calcite-components/3.2.1/calcite.esm.js"></script>
+
+    <!-- Load the ArcGIS Maps SDK for JavaScript from CDN -->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.33/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.33/"></script>
+
+    <!-- Load Map components from CDN-->
+    <script type="module" src="https://js.arcgis.com/4.33/map-components/"></script>
+  </head>
+
+  <body>
+    <arcgis-scene item-id="001bb7ee3ce44ae5a8a15bef72f4404a">
+      <arcgis-zoom position="top-left"></arcgis-zoom>
+      <arcgis-navigation-toggle position="top-left"></arcgis-navigation-toggle>
+      <arcgis-compass position="top-left"> </arcgis-compass>
+
+      <arcgis-placement position="top-right">
+        <calcite-panel heading="Integrated Mesh Modifications">
+          <calcite-scrim loading>
+            <calcite-notice open>
+              <div slot="title">Mesh is being updated</div>
+            </calcite-notice>
+          </calcite-scrim>
+
+          <calcite-block heading="Step 1: Create a modification polygon" expanded>
+            <calcite-button
+              id="createModification"
+              icon-start="edit-geometry"
+              label="Create modification polygon"
+              >Create polygon</calcite-button
+            >
+          </calcite-block>
+
+          <calcite-block heading="Step 2: Select modification type" expanded>
+            <calcite-segmented-control
+              id="modificationControl"
+              appearance="outline"
+              layout="vertical">
+              <calcite-segmented-control-item class="clip" value="clip" checked>
+                <b>Clip </b>&nbsp;- removes selected area
+              </calcite-segmented-control-item>
+              <calcite-segmented-control-item class="mask" value="mask">
+                <b>Mask</b>&nbsp;- displays only selected area
+              </calcite-segmented-control-item>
+              <calcite-segmented-control-item class="replace" value="replace">
+                <b>Replace</b>&nbsp;- flattens selected area
+              </calcite-segmented-control-item>
+            </calcite-segmented-control>
+          </calcite-block>
+        </calcite-panel>
+      </arcgis-placement>
+    </arcgis-scene>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
