@@ -1,140 +1,3 @@
-# Integrated Mesh Modification
-
-A 3D visualization tool built with ArcGIS Maps SDK for JavaScript and Calcite Web Components, allowing users to modify and interact with 3D integrated mesh data.
-
-## Features
-
-* **3D Visualization:** Interactive 3D scene with integrated mesh support
-* **Mesh Layer Support:** Works with both integrated-mesh and integrated-mesh-3dtiles layers
-* **Graphics Layer:** Add custom graphics to the scene
-* **Reactive Updates:** Real-time updates using reactiveUtils
-* **Loading States:** Visual feedback during data loading
-
-## Screenshots
-
-*1. Main application*
-
-
-## Prerequisites
-
-* Node.js
-* Vite
-
-## Project Setup
-
-### Initialize Project
-
-```bash
-# Create a new Vite project
-npm create vite@latest
-```
-
-Follow the instructions on screen to initialize the project.
-
-### Install Dependencies
-
-```bash
-npm install @arcgis/map-components
-```
-
-## Code Structure
-
-### HTML Structure
-
-```html
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-    <title>Integrated mesh modification</title>
-  </head>
-
-  <body>
-    <arcgis-scene item-id="001bb7ee3ce44ae5a8a15bef72f4404a">
-      <arcgis-zoom position="top-left"></arcgis-zoom>
-      <arcgis-navigation-toggle position="top-left"></arcgis-navigation-toggle>
-      <arcgis-compass position="top-left"> </arcgis-compass>
-
-      <arcgis-placement position="top-right">
-        <calcite-panel heading="Integrated Mesh Modifications">
-          <calcite-scrim loading>
-            <calcite-notice open>
-              <div slot="title">Mesh is being updated</div>
-            </calcite-notice>
-          </calcite-scrim>
-
-          <calcite-block heading="Step 1: Create a modification polygon" expanded>
-            <calcite-button
-              id="createModification"
-              icon-start="edit-geometry"
-              label="Create modification polygon"
-              >Create polygon</calcite-button
-            >
-          </calcite-block>
-
-          <calcite-block heading="Step 2: Select modification type" expanded>
-            <calcite-segmented-control
-              id="modificationControl"
-              appearance="outline"
-              layout="vertical">
-              <calcite-segmented-control-item class="clip" value="clip" checked>
-                <b>Clip </b>&nbsp;- removes selected area
-              </calcite-segmented-control-item>
-              <calcite-segmented-control-item class="mask" value="mask">
-                <b>Mask</b>&nbsp;- displays only selected area
-              </calcite-segmented-control-item>
-              <calcite-segmented-control-item class="replace" value="replace">
-                <b>Replace</b>&nbsp;- flattens selected area
-              </calcite-segmented-control-item>
-            </calcite-segmented-control>
-          </calcite-block>
-        </calcite-panel>
-      </arcgis-placement>
-    </arcgis-scene>
-    <script type="module" src="./src/main.js"></script>
-  </body>
-</html>
-```
-
-### CSS Styling
-
-```css
-@import "https://js.arcgis.com/calcite-components/3.2.1/calcite.css";
-@import "https://js.arcgis.com/4.33/esri/themes/light/main.css";
-@import "https://js.arcgis.com/4.33/map-components/main.css";
-
-html,
-body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.clip {
-  border-left: 5px solid rgb(252, 173, 88);
-}
-
-.mask {
-  border-left: 5px solid rgb(157, 219, 129);
-}
-
-.replace {
-  border-left: 5px solid rgb(133, 148, 209);
-}
-
-calcite-panel {
-  display: none;
-}
-
-```
-
-### TypeScript Implementation
-
-1. **Import the required modules**
-
-```typescript
 import "./style.css";
 
 import "@arcgis/map-components/components/arcgis-scene";
@@ -158,11 +21,7 @@ import * as reactiveUtils from "@arcgis/core/core/reactiveUtils";
 import Layer from "@arcgis/core/layers/Layer";
 import IntegratedMeshLayer from "@arcgis/core/layers/IntegratedMeshLayer";
 import IntegratedMesh3DTilesLayer from "@arcgis/core/layers/IntegratedMesh3DTilesLayer";
-```
 
-2. **Get the SceneView element from the DOM**
-
-```typescript
 // Get the SceneView element from the DOM
 const arcgisScene: HTMLArcgisSceneElement | null =
   document.querySelector("arcgis-scene");
@@ -170,19 +29,11 @@ if (!arcgisScene) {
   throw new Error("Scene element not found");
 }
 await arcgisScene.viewOnReady();
-```
 
-3. **Create a GraphicsLayer for displaying graphics**
-
-```typescript
 // Create a GraphicsLayer for displaying graphics
 const graphicsLayer: GraphicsLayer = new GraphicsLayer();
 arcgisScene.map?.add(graphicsLayer);
-```
 
-4. **Find the integrated mesh layer in the map**
-
-```typescript
 // Find the integrated mesh layer in the map
 // Supports both integrated-mesh and integrated-mesh-3dtiles types
 const imLayer: IntegratedMeshLayer | IntegratedMesh3DTilesLayer | undefined =
@@ -192,22 +43,14 @@ const imLayer: IntegratedMeshLayer | IntegratedMesh3DTilesLayer | undefined =
       layer.type === "integrated-mesh-3dtiles"
     );
   }) as IntegratedMeshLayer | IntegratedMesh3DTilesLayer | undefined;
-```
 
-5. **Get the scrim element for loading states**
-
-```typescript
 // Get the scrim element for loading states
 const scrim: HTMLCalciteScrimElement | null =
   arcgisScene.querySelector("calcite-scrim");
 if (!scrim) {
   throw new Error("Scrim element not found");
 }
-```
 
-6. **Wait for the layer view to be ready**
-
-```typescript
 // Wait for the layer view to be ready
 let imLayerView: __esri.LayerView = await arcgisScene.whenLayerView(
   imLayer as Layer
@@ -219,11 +62,7 @@ if (!panel) {
   throw new Error("Panel element not found");
 }
 panel.style.display = "flex";
-```
 
-7. **Add a handle to hide the loader when updates are complete**
-
-```typescript
 // Add a handle to hide the loader when updates are complete
 imLayerView.addHandles(
   reactiveUtils.when(
@@ -231,11 +70,7 @@ imLayerView.addHandles(
     () => setLoaderVisibility(false)
   )
 );
-```
 
-8. **Define the symbol for the sketch tool**
-
-```typescript
 // Define the symbol for the sketch tool
 // Uses a semi-transparent white fill for 3D polygons
 const sketchSymbol: __esri.PolygonSymbol3DProperties & { type: "polygon-3d" } =
@@ -273,11 +108,7 @@ createModificationButton.addEventListener("click", () => {
   createModificationButton.setAttribute("disabled", "");
   sketchViewModel.create("polygon");
 });
-```
 
-9. **Add event listeners for the modification control**
-
-```typescript
 // Add event listeners for the modification control
 const modificationControl: HTMLCalciteSegmentedControlElement | null =
   document.querySelector("#modificationControl");
@@ -290,11 +121,7 @@ modificationControl.addEventListener("click", () => {
     updateModificationType(graphic, modificationControl.value);
   }
 });
-```
 
-10. **Add event listeners for the sketchViewModel**
-
-```typescript
 // Listen to create events on the sketchViewModel
 sketchViewModel.on("create", (event) => {
   if (event.state === "cancel") {
@@ -328,11 +155,7 @@ arcgisScene.addEventListener("arcgisViewClick", (event) => {
       }
     });
 });
-```
 
-11. **Process the selected graphic**
-
-```typescript
 // Process the selected graphic
 function processSelectedGraphic(graphic) {
   if (sketchViewModel.state === "ready") {
@@ -351,11 +174,7 @@ function processSelectedGraphic(graphic) {
     });
   }
 }
-```
 
-12. **Update the modification type of the selected graphic**
-
-```typescript
 // Update the modification type of the selected graphic
 function updateModificationType(graphic, modificationType) {
   graphic.attributes = { modificationType: modificationType };
@@ -386,11 +205,7 @@ function updateModificationType(graphic, modificationType) {
     enableZ: modificationType === "replace",
   });
 }
-```
 
-13. **Update the modification type of the selected graphic**
-
-```typescript
 // Apply the modifications to the integrated mesh
 // - create the modification collection using data from the graphics layer (geometry and modification type)
 function updateIntegratedMesh() {
@@ -408,11 +223,7 @@ function updateIntegratedMesh() {
   // show loader overlay when modifications are changed
   setLoaderVisibility(true);
 }
-```
 
-14. **Show / hide loader overlay**
-
-```typescript
 // Show / hide loader overlay
 function setLoaderVisibility(visible) {
   if (!scrim) {
@@ -420,20 +231,3 @@ function setLoaderVisibility(visible) {
   }
   scrim.style.display = visible ? "flex" : "none";
 }
-```
-
-### Running the Application
-
-1. **Development Server**
-
-```bash
-npm run dev
-```
-
-This will start the development server at `http://localhost:5173`
-
-2. **Build for Production**
-
-```bash
-npm run build
-```

@@ -1,3 +1,7 @@
+@import "https://js.arcgis.com/calcite-components/3.2.1/calcite.css";
+@import "https://js.arcgis.com/4.33/esri/themes/light/main.css";
+@import "https://js.arcgis.com/4.33/map-components/main.css";
+
 html,
 body {
   height: 100%;
